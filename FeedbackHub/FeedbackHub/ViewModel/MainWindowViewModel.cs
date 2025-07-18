@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FeedbackHub.Model.DbContexts;
+using FeedbackHub.Model.Entities;
 
 namespace FeedbackHub.ViewModel
 {
@@ -53,7 +55,13 @@ namespace FeedbackHub.ViewModel
             Note = Note.Trim();
             Result = $"Оценка: {Rating}\nЗаметка: {Note}";
 
-            // Here you can add logic to save the feedback, e.g., to a file or database.
+            using (var db = new ApplicationDbContext())
+            {
+                var feedback = new Feedback() { Note = Note, Rating = Rating };
+
+                db.Add(feedback);
+                db.SaveChanges();
+            }
         }
     }
 }
