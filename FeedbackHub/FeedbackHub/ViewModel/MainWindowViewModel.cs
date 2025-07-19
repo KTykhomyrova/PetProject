@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using FeedbackHub.Model.DbContexts;
 using FeedbackHub.Model.Entities;
+using System.Collections.ObjectModel;
 
 namespace FeedbackHub.ViewModel
 {
@@ -49,19 +50,38 @@ namespace FeedbackHub.ViewModel
             }
         }
 
+        [ObservableProperty]
+        private ObservableCollection<Feedback> _feedbacks;
+
+        private readonly  ApplicationDbContext _context;
+
+        public MainWindowViewModel()
+        {
+            _context = new ApplicationDbContext();
+            _feedbacks = new ObservableCollection<Feedback>(_context.Feedbacks.ToList());
+        }
+
         [RelayCommand]
         private void Save()
         {
             Note = Note.Trim();
             Result = $"Оценка: {Rating}\nЗаметка: {Note}";
 
-            using (var db = new ApplicationDbContext())
-            {
-                var feedback = new Feedback() { Note = Note, Rating = Rating };
+            var feedback = new Feedback() { Note = Note, Rating = Rating };
 
-                db.Add(feedback);
-                db.SaveChanges();
-            }
+            _context.Add(feedback);
+            _context.SaveChanges();
+
+            Feedbacks.Add(feedback);
+        }
+
+        [RelayCommand]
+        private void Delete(Feedback feedback)
+        {
+            _context.Remove(feedback);
+            _context.SaveChanges();
+
+            Feedbacks.Remove(feedback);
         }
     }
 }
