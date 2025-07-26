@@ -78,21 +78,36 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="5,0,5,0" VerticalAlignment="Center" HorizontalAlignment="Center">
                             <Label Content="Rating:" />
-                            <TextBlock Text="{Binding Rating}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <TextBox Text="{Binding Rating}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="Note:" FontWeight="Bold" Margin="5,0,5,0"/>
                             <TextBox Text="{Binding Note}" />
-                            <TextBlock Text="Created At:" FontWeight="Bold" Margin="5,0,5,0"/>
-                            <TextBox Text="{Binding CreatedAt, StringFormat='{}{0:G}'}" FontStyle="Italic"/>
                         </StackPanel>
-                        <Button Grid.Column="2" Content="Delete" 
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock Text="Created At:" FontWeight="Bold" Margin="5,0,5,0"/>
+                            <TextBox Text="{Binding CreatedAt, StringFormat='{}{0:G}'}" FontStyle="Italic" Width="125" IsReadOnly="True"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock Text="Modified At:" FontWeight="Bold" Margin="5,0,5,0"/>
+                            <TextBox Text="{Binding ModifiedAt, StringFormat='{}{0:G}'}" FontStyle="Italic" Width="125" IsReadOnly="True"/>
+                        </StackPanel>
+                        
+                        <Button Grid.Column="4" Content="Delete" 
                                 Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding}"
                                 Margin="10,0,0,0"/>
+
+                        <Button Grid.Column="5" Content="Modify" 
+                                 Command="{Binding DataContext.ModifyCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                 CommandParameter="{Binding}"
+                                 Margin="10,0,0,0"/>    
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

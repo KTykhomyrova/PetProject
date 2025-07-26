@@ -39,22 +39,36 @@ namespace FeedbackHub.ViewModel
 
             var feedback = new Feedback() { Note = Note, Rating = Rating };
 
-            _context.Add(feedback);
+            _context.Feedbacks.Add(feedback);
             _context.SaveChanges();
 
             Feedbacks.Add(feedback);
         }
 
         [RelayCommand]
-        private void Update(Feedback feedback)
+        private void Modify(Feedback feedback)
         {
-            // todo
+            var old = _context.Feedbacks.Find(feedback.Id);
+
+            if (old == null)
+            {
+                return;
+            }
+
+           // old.Rating = feedback.Rating;
+            //old.Note = feedback.Note;
+
+            _context.SaveChanges();
+
+            feedback.ModifiedAt = old.ModifiedAt;
+
+            OnPropertyChanged(nameof(Feedbacks));
         }
 
         [RelayCommand]
         private void Delete(Feedback feedback)
         {
-            _context.Remove(feedback);
+            _context.Feedbacks.Remove(feedback);
             _context.SaveChanges();
 
             Feedbacks.Remove(feedback);
