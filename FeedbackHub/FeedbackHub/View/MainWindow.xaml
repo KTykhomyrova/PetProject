@@ -11,9 +11,22 @@
     Height="450"
     d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
     mc:Ignorable="d">
-    <StackPanel Margin="20">
-        <TextBlock Margin="0,0,0,5" Text="Оцени урок от 1 до 10:" />
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Margin="0,0,0,5" Text="Оцени урок от 1 до 10:" />
         <Slider
+            Grid.Row="1"
             Margin="0,0,0,10"
             IsSnapToTickEnabled="True"
             Maximum="10"
@@ -21,40 +34,44 @@
             TickFrequency="1"
             Value="{Binding Rating, Mode=TwoWay}" />
 
-        <TextBlock Margin="0,0,0,5" Text="Заметка:" />
+        <TextBlock Grid.Row="2" Margin="0,0,0,5" Text="Заметка:" />
         <TextBox
-            Height="60"
+            Grid.Row="3"
             Margin="0,0,0,10"
             AcceptsReturn="True"
             Text="{Binding Note, Mode=TwoWay}"
-            TextWrapping="Wrap" />
+            TextWrapping="Wrap"
+            VerticalAlignment="Stretch" />
 
         <Button
+            Grid.Row="4"
             Margin="0,0,0,10"
             Command="{Binding SaveCommand}"
             Content="Сохранить" />
 
-        <TextBlock
-            FontWeight="Bold"
-            Foreground="Green"
-            Text="{Binding Result, Mode=TwoWay}" 
-            Height="50px"/>
-
-        <ListBox ItemsSource="{Binding Feedbacks}" ScrollViewer.VerticalScrollBarVisibility="Auto" Height="150px" Margin="0, 10, 0, 0">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding Rating}" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Note}" />
-                        <TextBlock Text="{Binding CreatedAt, StringFormat='{}{0:G}'}" FontStyle="Italic"/>
-                        <Button Content="Delete" 
-                        Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                        CommandParameter="{Binding}"
-                        Margin="10,0,0,0"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-
-    </StackPanel>
+        <StackPanel Grid.Row="5" Orientation="Vertical">
+            <TextBlock
+                FontWeight="Bold"
+                Foreground="Green"
+                Text="{Binding Result, Mode=TwoWay}"
+                Margin="0,0,0,10"
+                VerticalAlignment="Top"/>
+            <ListBox ItemsSource="{Binding Feedbacks}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="0,0,0,0"
+                     VerticalAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Rating}" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding Note}" />
+                            <TextBlock Text="{Binding CreatedAt, StringFormat='{}{0:G}'}" FontStyle="Italic"/>
+                            <Button Content="Delete" 
+                                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"
+                                    Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+    </Grid>
 </Window>
