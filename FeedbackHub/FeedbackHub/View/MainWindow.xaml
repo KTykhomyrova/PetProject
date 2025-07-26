@@ -9,11 +9,27 @@
     Title="MainWindow"
     Width="800"
     Height="450"
-    d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
+    d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
-    <StackPanel Margin="20">
-        <TextBlock Margin="0,0,0,5" Text="Оцени урок от 1 до 10:" />
+    
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Оцени урок -->
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,10,5" Text="Оцени урок от 1 до 10:" VerticalAlignment="Center"/>
         <Slider
+            Grid.Row="0" Grid.Column="1"
             Margin="0,0,0,10"
             IsSnapToTickEnabled="True"
             Maximum="10"
@@ -21,22 +37,80 @@
             TickFrequency="1"
             Value="{Binding Rating, Mode=TwoWay}" />
 
-        <TextBlock Margin="0,0,0,5" Text="Заметка:" />
+        <!-- Заметка -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,10,5" Text="Заметка:" VerticalAlignment="Top"/>
         <TextBox
+            Grid.Row="1" Grid.Column="1"
             Height="60"
             Margin="0,0,0,10"
             AcceptsReturn="True"
             Text="{Binding Note, Mode=TwoWay}"
-            TextWrapping="Wrap" />
+            TextWrapping="Wrap"/>
 
         <Button
+            Grid.Row="2" Grid.Column="1"
             Margin="0,0,0,10"
-            Command="{Binding SaveCommand}"
-            Content="Сохранить" />
+            Command="{Binding CreateCommand}"
+            Content="Save"
+            HorizontalAlignment="Left"
+            Width="120"/>
 
+        <!-- Результат -->
         <TextBlock
+            Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
             FontWeight="Bold"
             Foreground="Green"
-            Text="{Binding Result, Mode=TwoWay}" />
-    </StackPanel>
+            Text="{Binding Result, Mode=TwoWay}" 
+            Height="50"
+            VerticalAlignment="Center"/>
+
+        <!-- Список отзывов -->
+        <ListBox
+            Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
+            ItemsSource="{Binding Feedbacks}"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            Margin="0,10,0,0"
+            >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="5,0,5,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Label Content="Rating:" />
+                            <TextBox Text="{Binding Rating}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock Text="Note:" FontWeight="Bold" Margin="5,0,5,0"/>
+                            <TextBox Text="{Binding Note}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock Text="Created At:" FontWeight="Bold" Margin="5,0,5,0"/>
+                            <TextBox Text="{Binding CreatedAt, StringFormat='{}{0:G}'}" FontStyle="Italic" Width="125" IsReadOnly="True"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock Text="Modified At:" FontWeight="Bold" Margin="5,0,5,0"/>
+                            <TextBox Text="{Binding ModifiedAt, StringFormat='{}{0:G}'}" FontStyle="Italic" Width="125" IsReadOnly="True"/>
+                        </StackPanel>
+                        
+                        <Button Grid.Column="4" Content="Delete" 
+                                Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"
+                                Margin="10,0,0,0"/>
+
+                        <Button Grid.Column="5" Content="Modify" 
+                                 Command="{Binding DataContext.ModifyCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                 CommandParameter="{Binding}"
+                                 Margin="10,0,0,0"/>    
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
 </Window>
