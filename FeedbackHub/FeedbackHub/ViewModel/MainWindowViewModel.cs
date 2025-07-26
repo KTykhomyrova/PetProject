@@ -3,66 +3,36 @@ using CommunityToolkit.Mvvm.Input;
 using FeedbackHub.Model.DbContexts;
 using FeedbackHub.Model.Entities;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows;
 
 namespace FeedbackHub.ViewModel
 {
     internal partial class MainWindowViewModel : ObservableObject
     {
-        private int _rating = 10;
-        public int Rating
-        {
-            get => _rating;
-            set
-            {
-                if (value < 0 || value > 10)
-                    return;
+        [ObservableProperty]
+        private int _rating = 5;
 
-                SetProperty(ref _rating, value);
-                OnPropertyChanged(nameof(Rating));
-            }
-        }
-
+        [ObservableProperty]
         private string _note = string.Empty;
-        public string Note
-        {
-            get => _note;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    return;
 
-                SetProperty(ref _note, value);
-                OnPropertyChanged(nameof(Note));
-            }
-        }
-
+        [ObservableProperty]
         private string _result = string.Empty;
-        public string Result
-        {
-            get => _result;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    return;
-
-                SetProperty(ref _result, value);
-                OnPropertyChanged(nameof(Result));
-            }
-        }
 
         [ObservableProperty]
         private ObservableCollection<Feedback> _feedbacks;
 
-        private readonly  ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context = new();
 
         public MainWindowViewModel()
         {
-            _context = new ApplicationDbContext();
-            _feedbacks = new ObservableCollection<Feedback>(_context.Feedbacks.ToList());
+            _feedbacks = new(_context.Feedbacks.ToList());
+
+            FillDesignDataIfNeed();
         }
 
         [RelayCommand]
-        private void Save()
+        private void Create()
         {
             Note = Note.Trim();
             Result = $"Оценка: {Rating}\nЗаметка: {Note}";
@@ -76,12 +46,35 @@ namespace FeedbackHub.ViewModel
         }
 
         [RelayCommand]
+        private void Update(Feedback feedback)
+        {
+            // todo
+        }
+
+        [RelayCommand]
         private void Delete(Feedback feedback)
         {
             _context.Remove(feedback);
             _context.SaveChanges();
 
             Feedbacks.Remove(feedback);
+        }
+
+        private void FillDesignDataIfNeed()
+        {
+            if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            {
+                return;
+            }
+
+            Rating = 9;
+            Note = "Пример заметки";
+            Result = $"Оценка: {Rating}\nЗаметка: {Note}";
+            Feedbacks =
+                [
+                    new() { Rating = 2, Note = "Пример отзыва 1", CreatedAt = DateTime.UtcNow },
+                    new() { Rating = 8, Note = "Пример отзыва 2", CreatedAt = DateTime.UtcNow }
+                ];
         }
     }
 }
