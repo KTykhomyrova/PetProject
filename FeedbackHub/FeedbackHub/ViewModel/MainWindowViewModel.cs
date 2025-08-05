@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using FeedbackHub.Model.DbContexts;
 using FeedbackHub.Model.Entities;
+using FeedbackHub.ViewModel.Wrappers;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -11,64 +12,70 @@ namespace FeedbackHub.ViewModel
     internal partial class MainWindowViewModel : ObservableObject
     {
         [ObservableProperty]
-        private int _rating = 5;
+        private int _rating;
+
+        partial void OnRatingChanged(int value) =>
+            Result = GetResultMessage(Rating, Note);
 
         [ObservableProperty]
         private string _note = string.Empty;
+
+        partial void OnNoteChanged(string value) =>
+            Result = GetResultMessage(Rating, Note);
 
         [ObservableProperty]
         private string _result = string.Empty;
 
         [ObservableProperty]
-        private ObservableCollection<Feedback> _feedbacks;
+        private ObservableCollection<FeedbackWrapper> _feedbacks;
 
         private readonly ApplicationDbContext _context = new();
 
         public MainWindowViewModel()
         {
-            _feedbacks = new(_context.Feedbacks.ToList());
+            var feedbackWrappers = _context.Feedbacks.Select(x => new FeedbackWrapper(x));
+            _feedbacks = new(feedbackWrappers);
+
+            Rating = 5;
 
             FillDesignDataIfNeed();
         }
 
+
         [RelayCommand]
         private void Create()
         {
-            Note = Note.Trim();
-            Result = $"Оценка: {Rating}\nЗаметка: {Note}";
-
             var feedback = new Feedback() { Note = Note, Rating = Rating };
 
             _context.Feedbacks.Add(feedback);
             _context.SaveChanges();
 
-            Feedbacks.Add(feedback);
+            Feedbacks.Add(new FeedbackWrapper(feedback));
         }
 
         [RelayCommand]
-        private void Modify(Feedback feedback)
+        private void Modify(FeedbackWrapper feedback)
         {
-            var old = _context.Feedbacks.Find(feedback.Id);
-
-            if (old == null)
-            {
+            var tracked = _context.Feedbacks.Find(feedback.Id);
+            if (tracked is null)
                 return;
-            }
 
-           // old.Rating = feedback.Rating;
-            //old.Note = feedback.Note;
+            tracked.Rating = feedback.Rating;
+            tracked.Note = feedback.Note;
 
             _context.SaveChanges();
 
-            feedback.ModifiedAt = old.ModifiedAt;
-
-            OnPropertyChanged(nameof(Feedbacks));
+            feedback.ModifiedAt = tracked.ModifiedAt;
         }
 
         [RelayCommand]
-        private void Delete(Feedback feedback)
+        private void Delete(FeedbackWrapper feedback)
         {
-            _context.Feedbacks.Remove(feedback);
+            var tracked = _context.Feedbacks.Find(feedback.Id);
+            if (tracked is null)
+                return;
+
+            _context.Feedbacks.Remove(tracked);
             _context.SaveChanges();
 
             Feedbacks.Remove(feedback);
@@ -83,12 +90,14 @@ namespace FeedbackHub.ViewModel
 
             Rating = 9;
             Note = "Пример заметки";
-            Result = $"Оценка: {Rating}\nЗаметка: {Note}";
+            Result = GetResultMessage(Rating, Note);
             Feedbacks =
                 [
                     new() { Rating = 2, Note = "Пример отзыва 1", CreatedAt = DateTime.UtcNow },
                     new() { Rating = 8, Note = "Пример отзыва 2", CreatedAt = DateTime.UtcNow }
                 ];
         }
+        private static string GetResultMessage(int rating, string note) =>
+            $"Оценка: {rating} \nЗаметка: {note}";
     }
 }
