@@ -10,8 +10,56 @@
     Width="800"
     Height="450"
     d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel, IsDesignTimeCreatable=True}"
-    mc:Ignorable="d">
-    
+    mc:Ignorable="d"
+    FontFamily="Trebuchet MS">
+
+    <Window.Background>
+        <LinearGradientBrush x:Name="AnimatedGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop x:Name="GradientStop1" Color="#FFFDE2E4" Offset="0.0"/>
+            <GradientStop x:Name="GradientStop2" Color="#FFCDEDF6" Offset="0.33"/>
+            <GradientStop x:Name="GradientStop3" Color="#FFDFF8EB" Offset="0.66"/>
+            <GradientStop x:Name="GradientStop4" Color="#FFFFF6E5" Offset="1.0"/>
+        </LinearGradientBrush>
+    </Window.Background>
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                    <ColorAnimation Storyboard.TargetName="GradientStop1"
+                                    Storyboard.TargetProperty="Color"
+                                    From="#FFFDE2E4" To="#FFFADADD"
+                                    Duration="0:0:4"/>
+                    <ColorAnimation Storyboard.TargetName="GradientStop2"
+                                    Storyboard.TargetProperty="Color"
+                                    From="#FFCDEDF6" To="#FFD4E2F0"
+                                    Duration="0:0:4"/>
+                    <ColorAnimation Storyboard.TargetName="GradientStop3"
+                                    Storyboard.TargetProperty="Color"
+                                    From="#FFDFF8EB" To="#FFE7FCEB"
+                                    Duration="0:0:4"/>
+                    <ColorAnimation Storyboard.TargetName="GradientStop4"
+                                    Storyboard.TargetProperty="Color"
+                                    From="#FFFFF6E5" To="#FFFFF0D5"
+                                    Duration="0:0:4"/>
+                </Storyboard>
+            </BeginStoryboard>
+
+            <BeginStoryboard>
+                <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                    <PointAnimation Storyboard.TargetName="AnimatedGradient"
+                                    Storyboard.TargetProperty="StartPoint"
+                                    From="0,0" To="1,0"
+                                    Duration="0:0:15"/>
+                    <PointAnimation Storyboard.TargetName="AnimatedGradient"
+                                    Storyboard.TargetProperty="EndPoint"
+                                    From="1,1" To="0,1"
+                                    Duration="0:0:15"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -25,6 +73,8 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
+
 
         <!-- Оцени урок -->
         <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,10,5" Text="Оцени урок от 1 до 10:" VerticalAlignment="Center"/>
@@ -48,12 +98,34 @@
             TextWrapping="Wrap"/>
 
         <Button
-            Grid.Row="2" Grid.Column="1"
-            Margin="0,0,0,10"
-            Command="{Binding CreateCommand}"
-            Content="Save"
-            HorizontalAlignment="Left"
-            Width="120"/>
+    Grid.Row="2" Grid.Column="1"
+    Margin="0,0,0,10"
+    Command="{Binding CreateCommand}"
+    Content="Save"
+    HorizontalAlignment="Left"
+    Width="120">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" Background="#D7E9F9" CornerRadius="10" BorderBrush="#A9CFF5" BorderThickness="2" Padding="10" SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#E3F0FF"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#C7DCF7"/>
+                            <Setter TargetName="border" Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                            <Setter TargetName="border" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
 
         <!-- Результат -->
         <TextBlock
