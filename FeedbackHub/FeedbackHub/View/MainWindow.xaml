@@ -98,11 +98,52 @@
             Grid.Row="0"
             Grid.Column="1"
             Margin="0,0,0,10"
+            AutoToolTipPlacement="BottomRight"
+            AutoToolTipPrecision="0"
+            Foreground="#A9CFF5"
             IsSnapToTickEnabled="True"
             Maximum="10"
             Minimum="1"
             TickFrequency="1"
-            Value="{Binding Rating, Mode=TwoWay}" />
+            Value="{Binding Rating, Mode=TwoWay}">
+            <Slider.Template>
+                <ControlTemplate TargetType="Slider">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Border
+                            Grid.Row="0"
+                            Height="6"
+                            Background="LightBlue"
+                            CornerRadius="3" />
+
+                        <Track x:Name="PART_Track" Grid.Row="0">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Opacity="0" />
+                            </Track.DecreaseRepeatButton>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Opacity="0" />
+                            </Track.IncreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb Width="18" Height="18">
+                                    <Thumb.Template>
+                                        <ControlTemplate TargetType="Thumb">
+                                            <Ellipse
+                                                Fill="#D7E9F9"
+                                                Stroke="#A9CFF5"
+                                                StrokeThickness="2" />
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
+                            </Track.Thumb>
+                        </Track>
+                    </Grid>
+                </ControlTemplate>
+            </Slider.Template>
+        </Slider>
 
         <!--  Заметка  -->
         <TextBlock
