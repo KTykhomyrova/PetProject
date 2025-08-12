@@ -9,52 +9,65 @@
     Title="MainWindow"
     Width="800"
     Height="450"
-    d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel, IsDesignTimeCreatable=True}"
-    mc:Ignorable="d"
-    FontFamily="Trebuchet MS">
+    d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel,
+                                     IsDesignTimeCreatable=True}"
+    FontFamily="Trebuchet MS"
+    mc:Ignorable="d">
 
     <Window.Background>
         <LinearGradientBrush x:Name="AnimatedGradient" StartPoint="0,0" EndPoint="1,1">
-            <GradientStop x:Name="GradientStop1" Color="#FFFDE2E4" Offset="0.0"/>
-            <GradientStop x:Name="GradientStop2" Color="#FFCDEDF6" Offset="0.33"/>
-            <GradientStop x:Name="GradientStop3" Color="#FFDFF8EB" Offset="0.66"/>
-            <GradientStop x:Name="GradientStop4" Color="#FFFFF6E5" Offset="1.0"/>
+            <GradientStop x:Name="GradientStop1" Offset="0.0" Color="#FFFDE2E4" />
+            <GradientStop x:Name="GradientStop2" Offset="0.33" Color="#FFCDEDF6" />
+            <GradientStop x:Name="GradientStop3" Offset="0.66" Color="#FFDFF8EB" />
+            <GradientStop x:Name="GradientStop4" Offset="1.0" Color="#FFFFF6E5" />
         </LinearGradientBrush>
     </Window.Background>
 
     <Window.Triggers>
         <EventTrigger RoutedEvent="Loaded">
             <BeginStoryboard>
-                <Storyboard RepeatBehavior="Forever" AutoReverse="True">
-                    <ColorAnimation Storyboard.TargetName="GradientStop1"
-                                    Storyboard.TargetProperty="Color"
-                                    From="#FFFDE2E4" To="#FFFADADD"
-                                    Duration="0:0:4"/>
-                    <ColorAnimation Storyboard.TargetName="GradientStop2"
-                                    Storyboard.TargetProperty="Color"
-                                    From="#FFCDEDF6" To="#FFD4E2F0"
-                                    Duration="0:0:4"/>
-                    <ColorAnimation Storyboard.TargetName="GradientStop3"
-                                    Storyboard.TargetProperty="Color"
-                                    From="#FFDFF8EB" To="#FFE7FCEB"
-                                    Duration="0:0:4"/>
-                    <ColorAnimation Storyboard.TargetName="GradientStop4"
-                                    Storyboard.TargetProperty="Color"
-                                    From="#FFFFF6E5" To="#FFFFF0D5"
-                                    Duration="0:0:4"/>
+                <Storyboard AutoReverse="True" RepeatBehavior="Forever">
+                    <ColorAnimation
+                        Storyboard.TargetName="GradientStop1"
+                        Storyboard.TargetProperty="Color"
+                        From="#FFFDE2E4"
+                        To="#FFFADADD"
+                        Duration="0:0:4" />
+                    <ColorAnimation
+                        Storyboard.TargetName="GradientStop2"
+                        Storyboard.TargetProperty="Color"
+                        From="#FFCDEDF6"
+                        To="#FFD4E2F0"
+                        Duration="0:0:4" />
+                    <ColorAnimation
+                        Storyboard.TargetName="GradientStop3"
+                        Storyboard.TargetProperty="Color"
+                        From="#FFDFF8EB"
+                        To="#FFE7FCEB"
+                        Duration="0:0:4" />
+                    <ColorAnimation
+                        Storyboard.TargetName="GradientStop4"
+                        Storyboard.TargetProperty="Color"
+                        From="#FFFFF6E5"
+                        To="#FFFFF0D5"
+                        Duration="0:0:4" />
                 </Storyboard>
             </BeginStoryboard>
 
             <BeginStoryboard>
-                <Storyboard RepeatBehavior="Forever" AutoReverse="True">
-                    <PointAnimation Storyboard.TargetName="AnimatedGradient"
-                                    Storyboard.TargetProperty="StartPoint"
-                                    From="0,0" To="1,0"
-                                    Duration="0:0:15"/>
-                    <PointAnimation Storyboard.TargetName="AnimatedGradient"
-                                    Storyboard.TargetProperty="EndPoint"
-                                    From="1,1" To="0,1"
-                                    Duration="0:0:15"/>
+                <Storyboard AutoReverse="True" RepeatBehavior="Forever">
+                    <PointAnimation
+                        Storyboard.TargetName="AnimatedGradient"
+                        Storyboard.TargetProperty="StartPoint"
+                        From="0,0"
+                        To="1,0"
+                        Duration="0:0:15" />
+                    <PointAnimation
+                        Storyboard.TargetName="AnimatedGradient"
+                        Storyboard.TargetProperty="EndPoint"
+                        From="1,1"
+                        To="0,1"
+                        Duration="0:0:15" />
                 </Storyboard>
             </BeginStoryboard>
         </EventTrigger>
@@ -62,24 +75,28 @@
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-
-
-        <!-- Оцени урок -->
-        <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,10,5" Text="Оцени урок от 1 до 10:" VerticalAlignment="Center"/>
+        <!--  Оцени урок  -->
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="0,0,10,5"
+            VerticalAlignment="Center"
+            Text="Оцени урок от 1 до 10:" />
         <Slider
-            Grid.Row="0" Grid.Column="1"
+            Grid.Row="0"
+            Grid.Column="1"
             Margin="0,0,0,10"
             IsSnapToTickEnabled="True"
             Maximum="10"
@@ -87,38 +104,52 @@
             TickFrequency="1"
             Value="{Binding Rating, Mode=TwoWay}" />
 
-        <!-- Заметка -->
-        <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,10,5" Text="Заметка:" VerticalAlignment="Top"/>
+        <!--  Заметка  -->
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="0,0,10,5"
+            VerticalAlignment="Top"
+            Text="Заметка:" />
         <TextBox
-            Grid.Row="1" Grid.Column="1"
+            Grid.Row="1"
+            Grid.Column="1"
             Height="60"
             Margin="0,0,0,10"
             AcceptsReturn="True"
             Text="{Binding Note, Mode=TwoWay}"
-            TextWrapping="Wrap"/>
+            TextWrapping="Wrap" />
 
         <Button
-    Grid.Row="2" Grid.Column="1"
-    Margin="0,0,0,10"
-    Command="{Binding CreateCommand}"
-    Content="Save"
-    HorizontalAlignment="Left"
-    Width="120">
+            Grid.Row="2"
+            Grid.Column="1"
+            Width="120"
+            Margin="0,0,0,10"
+            HorizontalAlignment="Left"
+            Command="{Binding CreateCommand}"
+            Content="Save">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="border" Background="#D7E9F9" CornerRadius="10" BorderBrush="#A9CFF5" BorderThickness="2" Padding="10" SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border
+                        x:Name="border"
+                        Padding="10"
+                        Background="#D7E9F9"
+                        BorderBrush="#A9CFF5"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#E3F0FF"/>
+                            <Setter TargetName="border" Property="Background" Value="#E3F0FF" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#C7DCF7"/>
-                            <Setter TargetName="border" Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                            <Setter TargetName="border" Property="Background" Value="#C7DCF7" />
+                            <Setter TargetName="border" Property="RenderTransformOrigin" Value="0.5,0.5" />
                             <Setter TargetName="border" Property="RenderTransform">
                                 <Setter.Value>
-                                    <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                    <ScaleTransform ScaleX="0.95" ScaleY="0.95" />
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
@@ -127,59 +158,111 @@
             </Button.Template>
         </Button>
 
-        <!-- Результат -->
+        <!--  Результат  -->
         <TextBlock
-            Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+            Grid.Row="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Height="50"
+            VerticalAlignment="Center"
             FontWeight="Bold"
             Foreground="Green"
-            Text="{Binding Result, Mode=TwoWay}" 
-            Height="50"
-            VerticalAlignment="Center"/>
+            Text="{Binding Result, Mode=TwoWay}" />
 
-        <!-- Список отзывов -->
+        <!--  Список отзывов  -->
         <ListBox
-            Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
-            ItemsSource="{Binding Feedbacks}"
-            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            Grid.Row="5"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
             Margin="0,10,0,0"
-            >
+            ItemsSource="{Binding Feedbacks}"
+            ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="5,0,5,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel
+                            Grid.Column="0"
+                            Margin="5,0,5,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
                             <Label Content="Rating:" />
-                            <TextBox Text="{Binding Rating}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <TextBox
+                                MinWidth="20"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                FontWeight="Bold"
+                                Text="{Binding Rating}" />
                         </StackPanel>
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <TextBlock Text="Note:" FontWeight="Bold" Margin="5,0,5,0"/>
-                            <TextBox Text="{Binding Note}" />
+                        <StackPanel
+                            Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <TextBlock
+                                Margin="5,0,5,0"
+                                FontWeight="Bold"
+                                Text="Note:" />
+                            <TextBox
+                                MinWidth="200"
+                                HorizontalContentAlignment="Left"
+                                VerticalContentAlignment="Center"
+                                Text="{Binding Note}" />
                         </StackPanel>
-                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <TextBlock Text="Created At:" FontWeight="Bold" Margin="5,0,5,0"/>
-                            <TextBox Text="{Binding CreatedAt, StringFormat='{}{0:G}'}" FontStyle="Italic" Width="125" IsReadOnly="True"/>
+                        <StackPanel
+                            Grid.Column="2"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <TextBlock
+                                Margin="5,0,5,0"
+                                FontWeight="Bold"
+                                Text="Created At:" />
+                            <TextBox
+                                Width="125"
+                                FontStyle="Italic"
+                                IsReadOnly="True"
+                                Text="{Binding CreatedAt, StringFormat='{}{0:G}'}" />
                         </StackPanel>
-                        <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <TextBlock Text="Modified At:" FontWeight="Bold" Margin="5,0,5,0"/>
-                            <TextBox Text="{Binding ModifiedAt, StringFormat='{}{0:G}'}" FontStyle="Italic" Width="125" IsReadOnly="True"/>
+                        <StackPanel
+                            Grid.Column="3"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <TextBlock
+                                Margin="5,0,5,0"
+                                FontWeight="Bold"
+                                Text="Modified At:" />
+                            <TextBox
+                                Width="125"
+                                FontStyle="Italic"
+                                IsReadOnly="True"
+                                Text="{Binding ModifiedAt, StringFormat='{}{0:G}'}" />
                         </StackPanel>
-                        
-                        <Button Grid.Column="4" Content="Delete" 
-                                Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}"
-                                Margin="10,0,0,0"/>
 
-                        <Button Grid.Column="5" Content="Modify" 
-                                 Command="{Binding DataContext.ModifyCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                 CommandParameter="{Binding}"
-                                 Margin="10,0,0,0"/>    
+                        <Button
+                            Grid.Column="4"
+                            Margin="10,0,0,0"
+                            Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="{Binding}"
+                            Content="Delete" />
+
+                        <Button
+                            Grid.Column="5"
+                            Margin="10,0,0,0"
+                            Command="{Binding DataContext.ModifyCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="{Binding}"
+                            Content="Modify" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
