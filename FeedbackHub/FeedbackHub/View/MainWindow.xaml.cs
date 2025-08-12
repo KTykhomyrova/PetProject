@@ -5,10 +5,10 @@ namespace FeedbackHub.View
 {
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(MainWindowViewModel vm)
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
+            DataContext = vm;
         }
     }
 }

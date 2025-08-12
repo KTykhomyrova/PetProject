@@ -1,16 +1,11 @@
 ﻿using FeedbackHub.Model.Contracts;
 using FeedbackHub.Model.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FeedbackHub.Model.DbContexts
 {
-    internal class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
         public DbSet<Feedback> Feedbacks => Set<Feedback>();
 

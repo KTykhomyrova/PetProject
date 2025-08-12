@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace FeedbackHub.ViewModel
 {
-    internal partial class MainWindowViewModel : ObservableObject
+    public partial class MainWindowViewModel : ObservableObject
     {
         [ObservableProperty]
         private int _rating;
@@ -29,10 +29,11 @@ namespace FeedbackHub.ViewModel
         [ObservableProperty]
         private ObservableCollection<FeedbackWrapper> _feedbacks;
 
-        private readonly ApplicationDbContext _context = new();
+        private readonly ApplicationDbContext _context;
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(ApplicationDbContext context)
         {
+            _context = context;
             var feedbackWrappers = _context.Feedbacks.Select(x => new FeedbackWrapper(x));
             _feedbacks = new(feedbackWrappers);
 
