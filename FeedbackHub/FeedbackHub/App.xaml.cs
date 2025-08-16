@@ -32,7 +32,7 @@ namespace FeedbackHub
             services.AddScoped<ApplicationDbContext>();
 
             // todo: add logging service
-
+            services.AddSingleton<FeedbackHub.Services.LoggingService>();
             // Example: Register other services
             // services.AddSingleton<IYourService, YourService>();
             // services.AddScoped<IYourService, YourService>();
@@ -54,7 +54,8 @@ namespace FeedbackHub
             }
             catch (Exception ex)
             {
-                // todo: add loging
+                var logger = _host.Services.GetRequiredService<FeedbackHub.Services.LoggingService>();
+                logger.LogError("Unhandled exception", ex);
                 throw;
             }
         }
