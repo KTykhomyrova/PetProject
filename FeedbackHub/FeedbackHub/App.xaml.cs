@@ -1,18 +1,18 @@
 ﻿using FeedbackHub.Model.DbContexts;
+using FeedbackHub.Services;
 using FeedbackHub.View;
 using FeedbackHub.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace FeedbackHub
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
-        private readonly IHost _host;
+        readonly IHost _host;
+        readonly ILoggingService _logger;
 
         public App()
         {
@@ -22,42 +22,32 @@ namespace FeedbackHub
                     ConfigureServices(services);
                 })
                 .Build();
+
+            _logger = _host.Services.GetRequiredService<ILoggingService>();
+            SubsicribeToUnhandledExceptions();
         }
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            // Register your services here
-            services.AddSingleton<MainWindow>();
-            services.AddSingleton<MainWindowViewModel>();
             services.AddScoped<ApplicationDbContext>();
 
-            // todo: add logging service
-            services.AddSingleton<FeedbackHub.Services.LoggingService>();
-            // Example: Register other services
-            // services.AddSingleton<IYourService, YourService>();
-            // services.AddScoped<IYourService, YourService>();
-            // services.AddTransient<IYourService, YourService>();
+            services.AddSingleton<MainWindow>();
+            services.AddSingleton<MainWindowViewModel>();
+
+            services.AddSingleton<ILoggingService>(provider =>
+            {
+                return new LoggingService("app.log");
+            });
         }
 
         protected override async void OnStartup(StartupEventArgs e)
         {
-            try
-            {
-                base.OnStartup(e);
+            base.OnStartup(e);
 
-                await _host.StartAsync();
+            await _host.StartAsync();
 
-
-                var mainWindow = _host.Services.GetRequiredService<MainWindow>();
-                mainWindow.Show();
-
-            }
-            catch (Exception ex)
-            {
-                var logger = _host.Services.GetRequiredService<FeedbackHub.Services.LoggingService>();
-                logger.LogError("Unhandled exception", ex);
-                throw;
-            }
+            var mainWindow = _host.Services.GetRequiredService<MainWindow>();
+            mainWindow.Show();
         }
 
         protected override async void OnExit(ExitEventArgs e)
@@ -68,6 +58,31 @@ namespace FeedbackHub
             }
 
             base.OnExit(e);
+        }
+
+        private void SubsicribeToUnhandledExceptions()
+        {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            DispatcherUnhandledException += App_DispatcherUnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+        }
+
+        private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            _logger.LogError("UI thread unhandled exception", e.Exception);
+            e.Handled = true;
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var ex = e.ExceptionObject as Exception;
+            _logger.LogError("AppDomain unhandled exception", ex ?? new Exception("Unknown AppDomain exception"));
+        }
+
+        private void TaskScheduler_UnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
+        {
+            _logger.LogError("Unobserved task exception", e.Exception);
+            e.SetObserved();
         }
     }
 }

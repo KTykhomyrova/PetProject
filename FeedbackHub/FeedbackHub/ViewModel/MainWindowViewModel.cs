@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using FeedbackHub.Model.DbContexts;
 using FeedbackHub.Model.Entities;
+using FeedbackHub.Services;
 using FeedbackHub.ViewModel.Wrappers;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -11,37 +12,55 @@ namespace FeedbackHub.ViewModel
 {
     public partial class MainWindowViewModel : ObservableObject
     {
+        #region ObservableProperties
+
         [ObservableProperty]
-        private int _rating;
+        int _rating = 5;
+
+        [ObservableProperty]
+        string _note = string.Empty;
+
+        [ObservableProperty]
+        string _result = string.Empty;
+
+        [ObservableProperty]
+        ObservableCollection<FeedbackWrapper> _feedbacks;
+
+        #endregion
+
+        #region OnPropertyChanged Methods
 
         partial void OnRatingChanged(int value) =>
             Result = GetResultMessage(Rating, Note);
 
-        [ObservableProperty]
-        private string _note = string.Empty;
-
         partial void OnNoteChanged(string value) =>
             Result = GetResultMessage(Rating, Note);
 
-        [ObservableProperty]
-        private string _result = string.Empty;
+        #endregion
 
-        [ObservableProperty]
-        private ObservableCollection<FeedbackWrapper> _feedbacks;
+        #region Services
 
-        private readonly ApplicationDbContext _context;
+        readonly ILoggingService _loggingService;
+        readonly ApplicationDbContext _context;
 
-        public MainWindowViewModel(ApplicationDbContext context)
+        #endregion
+
+        #region Constructors
+
+        public MainWindowViewModel(ILoggingService loggingService, ApplicationDbContext context)
         {
+            _loggingService = loggingService;
             _context = context;
+
             var feedbackWrappers = _context.Feedbacks.Select(x => new FeedbackWrapper(x));
             _feedbacks = new(feedbackWrappers);
-
-            Rating = 5;
 
             FillDesignDataIfNeed();
         }
 
+        #endregion
+
+        #region RelayCommands
 
         [RelayCommand]
         private void Create()
@@ -82,6 +101,10 @@ namespace FeedbackHub.ViewModel
             Feedbacks.Remove(feedback);
         }
 
+        #endregion
+
+        #region Private Methods
+
         private void FillDesignDataIfNeed()
         {
             if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
@@ -98,7 +121,10 @@ namespace FeedbackHub.ViewModel
                     new() { Rating = 8, Note = "Пример отзыва 2", CreatedAt = DateTime.UtcNow }
                 ];
         }
+
         private static string GetResultMessage(int rating, string note) =>
             $"Оценка: {rating} \nЗаметка: {note}";
+
+        #endregion
     }
 }

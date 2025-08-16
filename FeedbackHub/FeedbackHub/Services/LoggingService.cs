@@ -2,18 +2,31 @@
 
 namespace FeedbackHub.Services
 {
-    public class LoggingService
+    public interface ILoggingService
     {
-        private readonly string _logFilePath;
+        void LogInfo(string message);
+        void LogError(string message, Exception ex);
+    }
 
-        public LoggingService()
-        {
-            _logFilePath = "app.log";
-        }
+    public class LoggingService(string logFilePath) : ILoggingService
+    {
+        readonly string _logFilePath = logFilePath;
 
-        public void Log(string message)
+        public void LogInfo(string message)
         {
             var logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [INFO] {message}";
+            File.AppendAllText(_logFilePath, logMessage + Environment.NewLine);
+        }
+
+        public void LogWarning(string message)
+        {
+            var logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [WARNING] {message}";
+            File.AppendAllText(_logFilePath, logMessage + Environment.NewLine);
+        }
+
+        public void LogError(string message)
+        {
+            var logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [ERROR] {message}";
             File.AppendAllText(_logFilePath, logMessage + Environment.NewLine);
         }
 
