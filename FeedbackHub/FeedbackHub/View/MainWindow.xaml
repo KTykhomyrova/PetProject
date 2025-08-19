@@ -7,8 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodel="clr-namespace:FeedbackHub.ViewModel"
     Title="MainWindow"
-    Width="800"
-    Height="450"
+    Width="1000"
+    Height="550"
     d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel,
                                      IsDesignTimeCreatable=True}"
     FontFamily="Trebuchet MS"
@@ -73,240 +73,379 @@
         </EventTrigger>
     </Window.Triggers>
 
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        <!--  Оцени урок  -->
-        <TextBlock
-            Grid.Row="0"
-            Grid.Column="0"
-            Margin="0,0,10,5"
-            VerticalAlignment="Center"
-            Text="Оцени урок от 1 до 10:" />
-        <Slider
-            Grid.Row="0"
-            Grid.Column="1"
-            Margin="0,0,0,10"
-            AutoToolTipPlacement="BottomRight"
-            AutoToolTipPrecision="0"
-            Foreground="#A9CFF5"
-            IsSnapToTickEnabled="True"
-            Maximum="10"
-            Minimum="1"
-            TickFrequency="1"
-            Value="{Binding Rating, Mode=TwoWay}">
-            <Slider.Template>
-                <ControlTemplate TargetType="Slider">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-
-                        <Border
-                            Grid.Row="0"
-                            Height="6"
-                            Background="LightBlue"
-                            CornerRadius="3" />
-
-                        <Track x:Name="PART_Track" Grid.Row="0">
-                            <Track.DecreaseRepeatButton>
-                                <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Opacity="0" />
-                            </Track.DecreaseRepeatButton>
-                            <Track.IncreaseRepeatButton>
-                                <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Opacity="0" />
-                            </Track.IncreaseRepeatButton>
-                            <Track.Thumb>
-                                <Thumb Width="18" Height="18">
-                                    <Thumb.Template>
-                                        <ControlTemplate TargetType="Thumb">
-                                            <Ellipse
-                                                Fill="#D7E9F9"
-                                                Stroke="#A9CFF5"
-                                                StrokeThickness="2" />
-                                        </ControlTemplate>
-                                    </Thumb.Template>
-                                </Thumb>
-                            </Track.Thumb>
-                        </Track>
-                    </Grid>
-                </ControlTemplate>
-            </Slider.Template>
-        </Slider>
-
-        <!--  Заметка  -->
-        <TextBlock
-            Grid.Row="1"
-            Grid.Column="0"
-            Margin="0,0,10,5"
-            VerticalAlignment="Top"
-            Text="Заметка:" />
-        <TextBox
-            Grid.Row="1"
-            Grid.Column="1"
-            Height="60"
-            Margin="0,0,0,10"
-            AcceptsReturn="True"
-            Text="{Binding Note, Mode=TwoWay}"
-            TextWrapping="Wrap" />
-
-        <Button
-            Grid.Row="2"
-            Grid.Column="1"
-            Width="120"
-            Margin="0,0,0,10"
+    <Grid>
+        <!-- Бургер меню -->
+        <Border
+            x:Name="SideMenu"
+            Width="200"
             HorizontalAlignment="Left"
-            Command="{Binding CreateCommand}"
-            Content="Save">
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Border
-                        x:Name="border"
-                        Padding="10"
-                        Background="#D7E9F9"
-                        BorderBrush="#A9CFF5"
-                        BorderThickness="2"
-                        CornerRadius="10"
-                        SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#E3F0FF" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#C7DCF7" />
-                            <Setter TargetName="border" Property="RenderTransformOrigin" Value="0.5,0.5" />
-                            <Setter TargetName="border" Property="RenderTransform">
-                                <Setter.Value>
-                                    <ScaleTransform ScaleX="0.95" ScaleY="0.95" />
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
+            Background="#F0F8FF"
+            BorderBrush="#A9CFF5"
+            BorderThickness="0,0,2,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-        <!--  Результат  -->
-        <TextBlock
-            Grid.Row="3"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Height="50"
-            VerticalAlignment="Center"
-            FontWeight="Bold"
-            Foreground="Green"
-            Text="{Binding Result, Mode=TwoWay}" />
+                <!-- Кнопка бургер меню -->
+                <Button
+                    x:Name="BurgerButton"
+                    Grid.Row="0"
+                    Height="40"
+                    Margin="10,10,10,20"
+                    HorizontalAlignment="Stretch"
+                    Click="BurgerButton_Click"
+                    Content="☰ Меню"
+                    FontWeight="Bold">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border
+                                x:Name="border"
+                                Background="#D7E9F9"
+                                BorderBrush="#A9CFF5"
+                                BorderThickness="1"
+                                CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#E3F0FF" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
 
-        <!--  Список отзывов  -->
-        <ListBox
-            Grid.Row="5"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Margin="0,10,0,0"
-            ItemsSource="{Binding Feedbacks}"
-            ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="0,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <StackPanel
-                            Grid.Column="0"
-                            Margin="5,0,5,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal">
-                            <Label Content="Rating:" />
-                            <TextBox
-                                MinWidth="20"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
-                                VerticalContentAlignment="Center"
-                                FontWeight="Bold"
-                                Text="{Binding Rating}" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Column="1"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal">
-                            <TextBlock
-                                Margin="5,0,5,0"
-                                FontWeight="Bold"
-                                Text="Note:" />
-                            <TextBox
-                                MinWidth="200"
-                                HorizontalContentAlignment="Left"
-                                VerticalContentAlignment="Center"
-                                Text="{Binding Note}" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Column="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal">
-                            <TextBlock
-                                Margin="5,0,5,0"
-                                FontWeight="Bold"
-                                Text="Created At:" />
-                            <TextBox
-                                Width="125"
-                                FontStyle="Italic"
-                                IsReadOnly="True"
-                                Text="{Binding CreatedAt, StringFormat='{}{0:G}'}" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Column="3"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal">
-                            <TextBlock
-                                Margin="5,0,5,0"
-                                FontWeight="Bold"
-                                Text="Modified At:" />
-                            <TextBox
-                                Width="125"
-                                FontStyle="Italic"
-                                IsReadOnly="True"
-                                Text="{Binding ModifiedAt, StringFormat='{}{0:G}'}" />
-                        </StackPanel>
+                <!-- Вкладки меню -->
+                <StackPanel
+                    x:Name="MenuItemsPanel"
+                    Grid.Row="1"
+                    Margin="10,0,10,10"
+                    Visibility="Visible">
 
-                        <Button
-                            Grid.Column="4"
-                            Margin="10,0,0,0"
-                            Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                            CommandParameter="{Binding}"
-                            Content="Delete" />
+                    <!-- Вкладка 1: Отзывы -->
+                    <Button
+                        x:Name="FeedbackTab"
+                        Height="35"
+                        Margin="0,0,0,5"
+                        HorizontalAlignment="Stretch"
+                        Click="TabButton_Click"
+                        Content="📝 Отзывы"
+                        Tag="Feedback"
+                        ToolTip="Управление отзывами">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border
+                                    x:Name="border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="#A9CFF5"
+                                    BorderThickness="1"
+                                    CornerRadius="3">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#E3F0FF" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
 
-                        <Button
-                            Grid.Column="5"
-                            Margin="10,0,0,0"
-                            Command="{Binding DataContext.ModifyCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                            CommandParameter="{Binding}"
-                            Content="Modify" />
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                    <!-- Вкладка 2: Статистика -->
+                    <Button
+                        x:Name="StatsTab"
+                        Height="35"
+                        Margin="0,0,0,5"
+                        HorizontalAlignment="Stretch"
+                        Click="TabButton_Click"
+                        Content="📊 Статистика"
+                        Tag="Stats"
+                        ToolTip="Просмотр статистики">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border
+                                    x:Name="border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="#A9CFF5"
+                                    BorderThickness="1"
+                                    CornerRadius="3">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#E3F0FF" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Основное содержимое -->
+        <Grid Margin="20,20,20,20" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Контент для вкладок -->
+            <Grid Grid.Column="1" Margin="10,0,0,0">
+
+                <!-- Контент вкладки Отзывы -->
+                <Grid x:Name="FeedbackContent" Visibility="Visible">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Оцени урок -->
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="0,0,10,5"
+                        VerticalAlignment="Center"
+                        Text="Оцени урок от 1 до 10:" />
+                    <Slider
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="0,0,0,10"
+                        AutoToolTipPlacement="BottomRight"
+                        AutoToolTipPrecision="0"
+                        Foreground="#A9CFF5"
+                        IsSnapToTickEnabled="True"
+                        Maximum="10"
+                        Minimum="1"
+                        TickFrequency="1"
+                        Value="{Binding Rating, Mode=TwoWay}">
+                        <Slider.Template>
+                            <ControlTemplate TargetType="Slider">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <Border
+                                        Grid.Row="0"
+                                        Height="6"
+                                        Background="LightBlue"
+                                        CornerRadius="3" />
+
+                                    <Track x:Name="PART_Track" Grid.Row="0">
+                                        <Track.DecreaseRepeatButton>
+                                            <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Opacity="0" />
+                                        </Track.DecreaseRepeatButton>
+                                        <Track.IncreaseRepeatButton>
+                                            <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Opacity="0" />
+                                        </Track.IncreaseRepeatButton>
+                                        <Track.Thumb>
+                                            <Thumb Width="18" Height="18">
+                                                <Thumb.Template>
+                                                    <ControlTemplate TargetType="Thumb">
+                                                        <Ellipse
+                                                            Fill="#D7E9F9"
+                                                            Stroke="#A9CFF5"
+                                                            StrokeThickness="2" />
+                                                    </ControlTemplate>
+                                                </Thumb.Template>
+                                            </Thumb>
+                                        </Track.Thumb>
+                                    </Track>
+                                </Grid>
+                            </ControlTemplate>
+                        </Slider.Template>
+                    </Slider>
+
+                    <!-- Заметка -->
+                    <TextBlock
+                        Grid.Row="1"
+                        Margin="0,0,10,5"
+                        VerticalAlignment="Top"
+                        Text="Заметка:" />
+                    <TextBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Height="60"
+                        Margin="0,0,0,10"
+                        AcceptsReturn="True"
+                        Text="{Binding Note, Mode=TwoWay}"
+                        TextWrapping="Wrap" />
+
+                    <Button
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Width="120"
+                        Margin="0,0,0,10"
+                        HorizontalAlignment="Left"
+                        Command="{Binding CreateCommand}"
+                        Content="Save">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border
+                                    x:Name="border"
+                                    Padding="10"
+                                    Background="#D7E9F9"
+                                    BorderBrush="#A9CFF5"
+                                    BorderThickness="2"
+                                    CornerRadius="10"
+                                    SnapsToDevicePixels="True">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#E3F0FF" />
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#C7DCF7" />
+                                        <Setter TargetName="border" Property="RenderTransformOrigin" Value="0.5,0.5" />
+                                        <Setter TargetName="border" Property="RenderTransform">
+                                            <Setter.Value>
+                                                <ScaleTransform ScaleX="0.95" ScaleY="0.95" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <!-- Результат -->
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.ColumnSpan="2"
+                        Height="50"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Foreground="Green"
+                        Text="{Binding Result, Mode=TwoWay}" />
+
+                    <!-- Список отзывов -->
+                    <ListBox
+                        Grid.Row="5"
+                        Grid.ColumnSpan="2"
+                        Margin="0,10,0,0"
+                        ItemsSource="{Binding Feedbacks}"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel
+                                        Grid.Column="0"
+                                        Margin="5,0,5,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <Label Content="Rating:" />
+                                        <TextBox
+                                            MinWidth="20"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontWeight="Bold"
+                                            Text="{Binding Rating}" />
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            Margin="5,0,5,0"
+                                            FontWeight="Bold"
+                                            Text="Note:" />
+                                        <TextBox
+                                            MinWidth="200"
+                                            HorizontalContentAlignment="Left"
+                                            VerticalContentAlignment="Center"
+                                            Text="{Binding Note}" />
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            Margin="5,0,5,0"
+                                            FontWeight="Bold"
+                                            Text="Created At:" />
+                                        <TextBox
+                                            Width="125"
+                                            FontStyle="Italic"
+                                            IsReadOnly="True"
+                                            Text="{Binding CreatedAt, StringFormat='{}{0:G}'}" />
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Column="3"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            Margin="5,0,5,0"
+                                            FontWeight="Bold"
+                                            Text="Modified At:" />
+                                        <TextBox
+                                            Width="125"
+                                            FontStyle="Italic"
+                                            IsReadOnly="True"
+                                            Text="{Binding ModifiedAt, StringFormat='{}{0:G}'}" />
+                                    </StackPanel>
+
+                                    <Button
+                                        Grid.Column="4"
+                                        Margin="10,0,0,0"
+                                        Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}"
+                                        Content="Delete" />
+
+                                    <Button
+                                        Grid.Column="5"
+                                        Margin="10,0,0,0"
+                                        Command="{Binding DataContext.ModifyCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}"
+                                        Content="Modify" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+
+                <!-- Контент вкладки Статистика -->
+                <Grid x:Name="StatsContent" Visibility="Collapsed">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock
+                            FontSize="24"
+                            FontWeight="Bold"
+                            Foreground="#2E86AB"
+                            Text="📊 Статистика отзывов" />
+                        <TextBlock
+                            Margin="0,20,0,0"
+                            FontSize="16"
+                            Foreground="#555"
+                            Text="Здесь будет отображаться статистика по отзывам" />
+                        <TextBlock
+                            Margin="0,10,0,0"
+                            FontStyle="Italic"
+                            Foreground="#777"
+                            Text="(Функционал в разработке)" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
