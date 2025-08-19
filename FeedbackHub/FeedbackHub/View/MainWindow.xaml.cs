@@ -11,55 +11,32 @@ namespace FeedbackHub.View
         {
             InitializeComponent();
             DataContext = vm;
-
-        }
-            private void BurgerButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Переключение видимости меню
-            if (MenuItemsPanel.Visibility == Visibility.Visible)
-            {
-                MenuItemsPanel.Visibility = Visibility.Collapsed;
-                SideMenu.Width = 60;
-                BurgerButton.Content = "☰";
-            }
-            else
-            {
-                MenuItemsPanel.Visibility = Visibility.Visible;
-                SideMenu.Width = 200;
-                BurgerButton.Content = "☰ Меню";
-            }
         }
 
         private void TabButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            if (button != null)
+            if (sender is not Button button)
+                return;
+
+            // Установка выделения для активной вкладки
+            button.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D7E9F9"));
+
+            // Переключение контента
+            switch (button.Tag.ToString())
             {
-                // Сброс стилей всех кнопок
-                ResetTabButtons();
+                case "Feedback":
+                    FeedbackContent.Visibility = Visibility.Visible;
+                    StatsContent.Visibility = Visibility.Collapsed;
+                    break;
 
-                // Установка выделения для активной вкладки
-                button.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D7E9F9"));
+                case "Stats":
+                    FeedbackContent.Visibility = Visibility.Collapsed;
+                    StatsContent.Visibility = Visibility.Visible;
+                    break;
 
-                // Переключение контента
-                switch (button.Tag.ToString())
-                {
-                    case "Feedback":
-                        FeedbackContent.Visibility = Visibility.Visible;
-                        StatsContent.Visibility = Visibility.Collapsed;
-                        break;
-                    case "Stats":
-                        FeedbackContent.Visibility = Visibility.Collapsed;
-                        StatsContent.Visibility = Visibility.Visible;
-                        break;
-                }
+                default:
+                    return;
             }
-        }
-
-        private void ResetTabButtons()
-        {
-            FeedbackTab.Background = Brushes.Transparent;
-            StatsTab.Background = Brushes.Transparent;
         }
     }
 }

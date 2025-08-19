@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:FeedbackHub"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodel="clr-namespace:FeedbackHub.ViewModel"
-    Title="MainWindow"
+    Title="Feedback Hub"
     Width="1000"
     Height="550"
     d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel,
@@ -88,40 +88,10 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <!-- Кнопка бургер меню -->
-                <Button
-                    x:Name="BurgerButton"
-                    Grid.Row="0"
-                    Height="40"
-                    Margin="10,10,10,20"
-                    HorizontalAlignment="Stretch"
-                    Click="BurgerButton_Click"
-                    Content="☰ Меню"
-                    FontWeight="Bold">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border
-                                x:Name="border"
-                                Background="#D7E9F9"
-                                BorderBrush="#A9CFF5"
-                                BorderThickness="1"
-                                CornerRadius="5">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#E3F0FF" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-
                 <!-- Вкладки меню -->
                 <StackPanel
-                    x:Name="MenuItemsPanel"
                     Grid.Row="1"
-                    Margin="10,0,10,10"
+                    Margin="10"
                     Visibility="Visible">
 
                     <!-- Вкладка 1: Отзывы -->
@@ -205,10 +175,15 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
                     <!-- Оцени урок -->
                     <TextBlock
                         Grid.Row="0"
+                        Grid.Column="0"
                         Margin="0,0,10,5"
                         VerticalAlignment="Center"
                         Text="Оцени урок от 1 до 10:" />
